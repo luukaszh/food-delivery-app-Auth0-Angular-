@@ -71,4 +71,8 @@ export class UserService {
       return JSON.parse(userJson) as User;
     return new User();
   }
+
+  isAdminLoggedIn(user: User){
+    return user.isadmin;
+  }
 }

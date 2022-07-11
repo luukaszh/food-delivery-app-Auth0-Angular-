@@ -23,6 +23,7 @@ import { RegisterPageComponent } from './components/register-page/register-page.
 import { AdminPageComponent } from './components/admin-page/admin-page.component';
 import { MatSelectModule } from "@angular/material/select";
 import { NotFoundPageComponent } from './components/not-found-page/not-found-page.component';
+import {AuthGuard} from "./auth.guard";
 
 
 
@@ -56,7 +57,7 @@ import { NotFoundPageComponent } from './components/not-found-page/not-found-pag
         ReactiveFormsModule,
         MatSelectModule,
     ],
-  providers: [],
+  providers: [AuthGuard],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
