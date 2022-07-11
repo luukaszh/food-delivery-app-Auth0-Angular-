@@ -30,4 +30,8 @@ export class HomeComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  onSearch(searchValue: string){
+    this.searchText = searchValue.toLowerCase();
+  }
+
 }
