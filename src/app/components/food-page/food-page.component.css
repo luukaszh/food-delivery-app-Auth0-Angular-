@@ -1,0 +1,61 @@
+.container{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  margin: 3rem;
+}
+
+.container > *{
+  min-width: 25rem;
+  max-width: 40rem;
+  border-radius: 3rem;
+  margin: 1rem;
+  box-shadow: 0 0 0.3rem black;
+  background-color: whitesmoke;
+}
+
+.name{
+  font-size: 2rem;
+  text-align: center;
+  margin: 1.1rem;
+}
+
+.stars{
+  font-size: 2rem;
+  margin: 0.5rem 0;
+  text-align: center;
+}
+
+.origins{
+  margin: 0.5rem 0;
+  text-align: center;
+}
+
+.cook-time{
+  margin: 0.5rem 0;
+  text-align: center;
+}
+
+.price{
+  margin: 0.5rem 0;
+  text-align: center;
+}
+
+.add-to-cart{
+  text-align: center;
+  margin: 1.1rem;
+}
+
+.product-item-footer{
+  height: 3rem;
+}
+
+.mat-icon {
+  display: inline-flex;
+  vertical-align: middle;
+}
+
+.add-to-cart:hover{
+  opacity: 0.7;
+}

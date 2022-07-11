@@ -1,0 +1,77 @@
+<mat-card>
+  <mat-card-content class="first-card">
+    <div class="header">
+      <h2>Add Pizza</h2>
+    </div>
+    <form  name="addForm"
+           [formGroup]="addForm">
+
+      <div class="error" *ngIf="addForm.controls.name.errors && isSubmit">
+        <div *ngIf="addForm.controls.name.errors.required">Required value!</div>
+      </div>
+      <div class="name-input">
+        <mat-form-field class="full-width" appearance="outline">
+          <mat-label>Name</mat-label>
+          <input type="name" placeholder="Name" formControlName="name" matInput>
+        </mat-form-field>
+      </div>
+
+      <div class="error" *ngIf="addForm.controls.price.errors && isSubmit">
+        <div *ngIf="addForm.controls.price.errors.required">Required value!</div>
+      </div>
+      <div class="price-input">
+        <mat-form-field class="full-width" appearance="outline">
+          <mat-label>Price</mat-label>
+          <input type="price" placeholder="Price" formControlName="price" matInput>
+        </mat-form-field>
+      </div>
+
+      <div class="error" *ngIf="addForm.controls.cooktime.errors && isSubmit">
+        <div *ngIf="addForm.controls.cooktime.errors.required">Required value!</div>
+      </div>
+      <div class="cookTime-input">
+        <mat-form-field class="full-width" appearance="outline">
+          <mat-label>CookTime</mat-label>
+          <input type="cooktime" placeholder="CookTime" formControlName="cooktime" matInput>
+        </mat-form-field>
+      </div>
+
+      <div class="error" *ngIf="addForm.controls.imageurl.errors && isSubmit">
+        <div *ngIf="addForm.controls.imageurl.errors.required">Required value!</div>
+      </div>
+      <div class="imageUrl-input">
+        <mat-form-field class="full-width" appearance="outline">
+          <mat-label>ImageUrl</mat-label>
+          <input type="imageurl" placeholder="ImageUrl" formControlName="imageurl" matInput>
+        </mat-form-field>
+      </div>
+
+      <div class="subbmit-button">
+        <button mat-raised-button color="accent" (click)="onSubmit()">Add</button>
+      </div>
+
+    </form>
+  </mat-card-content>
+</mat-card>
+<mat-card>
+  <mat-card-content class="second-card">
+    <div class="header">
+      <h2>Delete Pizza</h2>
+    </div>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Food</mat-label>
+      <mat-select [(ngModel)]="selected">
+        <mat-option *ngFor="let food of foods"
+                    [value]="food.id">
+                    {{food.name}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <div class="subbmit-button">
+      <button mat-raised-button color="accent" (click)="onDeleteSubmit()">Delete</button>
+    </div>
+
+  </mat-card-content>
+</mat-card>

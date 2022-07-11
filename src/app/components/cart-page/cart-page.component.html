@@ -1,0 +1,37 @@
+<div class="container">
+  <ul>
+    <li *ngFor="let cartItem of cart.items">
+      <div>
+        <img [src]="cartItem.food.imageUrl">
+      </div>
+      <div class="name">
+        {{ cartItem.food.name }}
+      </div>
+      <div>
+        <select
+          #quantitySelect
+          [value]="cartItem.quantity"
+          (change)="changeCartQuantity(cartItem, quantitySelect.value)">
+          <option>1</option>
+          <option>2</option>
+          <option>3</option>
+        </select>
+      </div>
+      <div class="price">
+        {{cartItem.price | currency}}
+      </div>
+
+      <div>
+        <button class="remove-button" mat-raised-button color="warn" (click)="removeItemFromCart(cartItem)">Remove</button>
+      </div>
+    </li>
+  </ul>
+  <div class="checkout">
+    <div>
+      <div class="total-price">{{ cart.totalPrice | currency }}</div>
+    </div>
+
+    <a class="checkout-button" mat-raised-button color="accent" routerLink="/checkout">Checkout</a>
+    <a class="clear-button" mat-raised-button color="primary" (click)="clearCart()">Clear</a>
+  </div>
+</div>

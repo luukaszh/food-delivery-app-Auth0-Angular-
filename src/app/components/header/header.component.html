@@ -1,0 +1,18 @@
+<mat-toolbar color="accent">
+  <a class="logo" routerLink="/"><mat-icon> fastfood</mat-icon>Pizza Delivery</a>
+
+  <div class="space"></div>
+
+  <a *ngIf="user.isadmin" class="buttons" mat-raised-button routerLink="/admin" style="margin-right:1.5rem">Admin Page</a>
+
+  <a class="buttons" mat-raised-button routerLink="/cart-page" style="margin-right:1.5rem">Cart</a>
+
+  <a *ngIf="!user.token" class="buttons" mat-raised-button routerLink="/login" style="margin-right:1.5rem">Login</a>
+
+  <a *ngIf="!user.token" class="buttons" mat-raised-button routerLink="/register" style="margin-right:1.5rem">Register</a>
+
+  <a *ngIf="user.token" class="buttons" mat-raised-button routerLink="" style="margin-right:1.5rem">{{ user.name }}</a>
+
+  <span *ngIf="user.token" class="material-icons" (click)="logout()" style="margin-right:1.5rem">logout</span>
+
+</mat-toolbar>
