@@ -44,6 +44,7 @@ export class LoginPageComponent implements OnInit {
       password: this.loginForm.controls.password.value,
     }).subscribe(() => {
       this.router.navigateByUrl('/');
+      window.alert('Successful login!')
     });
   }
 }

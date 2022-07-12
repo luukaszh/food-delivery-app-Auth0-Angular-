@@ -3,7 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from "./app-routing.module";
 import { AppComponent } from './app.component';
 import { RouterModule } from "@angular/router";
-import { HttpClientModule } from "@angular/common/http";
+import { HTTP_INTERCEPTORS, HttpClientModule } from "@angular/common/http";
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatIconModule } from "@angular/material/icon";
 import { MatButtonModule } from "@angular/material/button";
@@ -23,7 +23,8 @@ import { RegisterPageComponent } from './components/register-page/register-page.
 import { AdminPageComponent } from './components/admin-page/admin-page.component';
 import { MatSelectModule } from "@angular/material/select";
 import { NotFoundPageComponent } from './components/not-found-page/not-found-page.component';
-import {AuthGuard} from "./auth.guard";
+import { AuthGuard } from "./auth.guard";
+import { AuthInterceptor } from "./auth.interceptor";
 
 
 
@@ -57,7 +58,7 @@ import {AuthGuard} from "./auth.guard";
         ReactiveFormsModule,
         MatSelectModule,
     ],
-  providers: [AuthGuard],
+  providers: [AuthGuard, {provide: HTTP_INTERCEPTORS, useClass:AuthInterceptor, multi: true}],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

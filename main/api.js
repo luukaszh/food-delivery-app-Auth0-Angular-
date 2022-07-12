@@ -5,6 +5,7 @@ const cors = require(`cors`);
 const bodyParser = require('body-parser');
 const jwt = require("jsonwebtoken");
 
+
 app.use(cors());
 app.use(bodyParser.json());
 app.use(express.json());
@@ -118,16 +119,43 @@ app.post('/users/register',  (req, res)=> {
   })
 })
 
+app.get('/users/verify', verifyToken, (req, res) => {
+  jwt.verify(req.token, 'secretKey', (err, authData) => {
+    if (err){
+      res.sendStatus(403);
+    } else{
+      res.json({
+        message: 'Post created',
+        authData,
+        isadmin: authData.isadmin,
+      });
+    }
+  });
+})
 
 const generateToken = (user) => {
   const token = jwt.sign({
     email: user.email, isadmin: user.isadmin
-  }, "SOmeRandomText", {
+  }, "secretKey", {
     expiresIn: "30d"
   });
-
+  console.log(token)
   user.token = token;
   return user;
+}
+
+function verifyToken(req, res, next){
+  const bearerHeader = req.headers['authorization']
+
+  if(typeof bearerHeader !== 'undefined'){
+    const bearer = bearerHeader.split(' ');
+    const bearerToken = bearer[1];
+    req.token = bearerToken;
+    console.log(bearerToken)
+    next();
+  }else {
+    res.sendStatus(403);
+  }
 }
 
 function dynamicSort(property) {
@@ -206,18 +234,3 @@ app.post('/examplefood/add', (req, res)=>{
   });
 })
 
-
-// app.post('/users', (req, res)=> {
-//   const user = req.body;
-//   console.log(user)
-//   let insertQuery = `insert into users(name, email, password, isadmin)
-//                        values('${user.name}', '${user.email}', '${user.password}', '${user.isadmin}')`
-//
-//   client.query(insertQuery, (err, result)=>{
-//     if(!err){
-//       res.send('Insertion was successful')
-//     }
-//     else{ console.log('User already exists', err.message) }
-//   })
-//   client.end;
-// })
