@@ -1,0 +1,41 @@
+<mat-card>
+  <mat-card-content>
+    <div class="header">
+      <h2>Food Order</h2>
+    </div>
+    <form  name="loginForm"
+           [formGroup]="checkoutForm">
+
+      <div class="error" *ngIf="checkoutForm.controls.name.errors && isSubmit">
+        <div class="required-value" *ngIf="checkoutForm.controls.name.errors.required">Required value!</div>
+      </div>
+      <div class="name-input">
+        <mat-form-field class="full-width" appearance="outline">
+          <mat-label>Name</mat-label>
+          <input type="name" placeholder="Name" formControlName="name" matInput>
+        </mat-form-field>
+      </div>
+
+      <div class="error" *ngIf="checkoutForm.controls.address.errors&& isSubmit">
+        <div class="required-value" *ngIf="checkoutForm.controls.address.errors.required">Required value!</div>
+      </div>
+      <div class="address-input">
+        <mat-form-field class="full-width" appearance="outline">
+          <mat-label>Address</mat-label>
+          <input type="address" placeholder="Address" formControlName="address" matInput>
+        </mat-form-field>
+      </div>
+
+      <div class="total">
+        Total: {{ order.totalprice | currency }}
+      </div>
+
+      <div class="order-button">
+        <button mat-raised-button color="accent" (click)="createOrder()">Order</button>
+      </div>
+
+    </form>
+  </mat-card-content>
+</mat-card>
+
+<app-order-items [order]="order"></app-order-items>

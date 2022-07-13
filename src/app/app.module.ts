@@ -25,6 +25,8 @@ import { MatSelectModule } from "@angular/material/select";
 import { NotFoundPageComponent } from './components/not-found-page/not-found-page.component';
 import { AuthGuard } from "./auth.guard";
 import { AuthInterceptor } from "./auth.interceptor";
+import { CheckoutPageComponent } from './components/checkout-page/checkout-page.component';
+import { OrderItemsComponent } from './components/checkout-page/order-items/order-items.component';
 
 
 
@@ -40,6 +42,8 @@ import { AuthInterceptor } from "./auth.interceptor";
     RegisterPageComponent,
     AdminPageComponent,
     NotFoundPageComponent,
+    CheckoutPageComponent,
+    OrderItemsComponent,
   ],
     imports: [
         BrowserModule,

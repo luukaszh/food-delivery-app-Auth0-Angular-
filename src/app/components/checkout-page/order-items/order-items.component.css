@@ -1,0 +1,27 @@
+table{
+  width: 100%;
+  font-size: large;
+}
+
+td{
+  height: 3rem;
+}
+
+td img {
+  width: 6rem;
+  height: 6rem;
+  object-fit: cover;
+  border-radius: 0.8rem;
+  box-shadow: 0 0 0.3rem black;
+  margin: 0.5rem
+}
+
+mat-card{
+  max-width: 95rem;
+  margin: 2rem;
+  text-align: left;
+}
+
+h2{
+  color: deeppink;
+}

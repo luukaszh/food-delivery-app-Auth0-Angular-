@@ -1,0 +1,27 @@
+<mat-card>
+  <mat-card-content>
+    <table>
+      <tr>
+        <h2>Order Items:</h2>
+      </tr>
+      <tr *ngFor="let item of order.items">
+        <td>
+          <a routerLink="/food/{{ item.food.id }}">
+            <img [src]="item.food.imageUrl">
+          </a>
+        </td>
+        <td>
+          {{ item.food.name }}
+        </td>
+        <td>
+          {{ item.food.price | currency }}
+        </td>
+        <td>
+          {{ item.quantity }}
+        </td>
+      </tr>
+      <tr>
+      </tr>
+    </table>
+  </mat-card-content>
+</mat-card>

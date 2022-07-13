@@ -1,0 +1,21 @@
+.required-value{
+  color: #d00606;
+}
+
+mat-card{
+  max-width: 15rem;
+  margin: 2rem;
+  max-height: 20rem;
+  color: deeppink;
+}
+
+.order-button:hover{
+  opacity: 0.7;
+}
+
+.total{
+  margin-bottom: 1rem;
+  color: black;
+  font-size: large;
+}
+

@@ -8,15 +8,16 @@ import { RegisterPageComponent } from "./components/register-page/register-page.
 import { AdminPageComponent } from "./components/admin-page/admin-page.component";
 import { NotFoundPageComponent } from "./components/not-found-page/not-found-page.component";
 import { AuthGuard } from "./auth.guard";
+import { CheckoutPageComponent } from "./components/checkout-page/checkout-page.component";
 
 const routes: Routes = [
   {path:'', component:HomeComponent},
-  {path:'search/:searchTerm', component:HomeComponent},
   {path:'food/:id', component: FoodPageComponent},
   {path:'cart-page', component: CartPageComponent},
   {path:'login', component: LoginPageComponent},
   {path:'register', component: RegisterPageComponent},
   {path:'admin', component: AdminPageComponent, canActivate: [AuthGuard]},
+  {path:'checkout', component: CheckoutPageComponent},
   {path:'**', component: NotFoundPageComponent}
 ]
 

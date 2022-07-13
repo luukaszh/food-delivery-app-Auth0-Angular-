@@ -2,7 +2,9 @@ import { Injectable } from '@angular/core';
 import {CartItem} from "../shared/models/cartItem";
 import {Cart} from "../shared/models/cart";
 import {Food} from "../shared/models/food";
-import {BehaviorSubject, Observable} from "rxjs";
+import {BehaviorSubject, Observable, Subscription} from "rxjs";
+import {Order} from "../shared/models/order";
+import {HttpClient} from "@angular/common/http";
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +15,11 @@ export class CartService {
 
   private cartSubject: BehaviorSubject<Cart> = new BehaviorSubject(this.cart);
 
-  constructor() { }
+  baseURL = 'http://localhost:3300'
+
+  constructor(
+    private httpClient: HttpClient,
+  ) { }
 
   addItemToCart(food: Food): void{
     this.cart.items.push(new CartItem(food))
@@ -54,5 +60,17 @@ export class CartService {
   private getFromStorage(): Cart{
     const cartJSON = localStorage.getItem('Cart');
     return cartJSON? JSON.parse(cartJSON): new Cart();
+  }
+
+  postOrder(order: Order): Subscription{
+    return this.httpClient.post<Order>(this.baseURL + '/orders', order)
+      .subscribe({
+        next: (order) =>{
+          console.log('Successful Order!')
+        },
+        error: (error) => {
+          console.log(error, 'Failed Order');
+        }
+      })
   }
 }

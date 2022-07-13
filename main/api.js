@@ -43,7 +43,7 @@ app.get('/food/:id', (req, res)=>{
 
 app.delete('/food/:id', (req, res)=> {
   let insertQuery = `delete from food where id=${req.params.id}`
-  console.log(req.params.id)
+  // console.log(req.params.id)
   client.query(insertQuery, (err, result)=>{
     if(!err){
       res.send('Deletion was successful')
@@ -91,13 +91,13 @@ app.post('/users/register',  (req, res)=> {
   client.query(`Select * from users`, (err, result)=>{
     if(!err){
       const users = result.rows;
-      console.log(users)
+      // console.log(users)
       const {email} = req.body;
       const user = users.find(user => user.email === email)
 
       if(!user){
         const user = req.body;
-        console.log(user)
+        // console.log(user)
         let insertQuery = `insert into users(name, email, password, isadmin)
                        values('${user.name}', '${user.email}', '${user.password}', '${user.isadmin=false}')`
 
@@ -133,13 +133,32 @@ app.get('/users/verify', verifyToken, (req, res) => {
   });
 })
 
+app.post('/orders', (req, res) => {
+  client.query(`Select * from orders`, (err, result)=>{
+
+    const orders_len = result.rows.length;
+    const formatItems = `${JSON.stringify(req.body.items)}`;
+    const order = req.body;
+
+    let insertQuery = `insert into orders(id, items, totalprice, name, address)
+                         values('${order.id = orders_len + 1}', '${formatItems}', '${order.totalprice}', '${order.name}', '${order.address}')`
+
+    client.query(insertQuery, (err, result)=>{
+      if(!err){
+        res.send('Insertion was successful')
+      }
+      else{ console.log('err', err.message) }
+    })
+    client.end;
+  });
+});
+
 const generateToken = (user) => {
   const token = jwt.sign({
     email: user.email, isadmin: user.isadmin
   }, "secretKey", {
     expiresIn: "30d"
   });
-  console.log(token)
   user.token = token;
   return user;
 }
