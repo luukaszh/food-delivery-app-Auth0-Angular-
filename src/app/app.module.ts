@@ -27,6 +27,7 @@ import { AuthGuard } from "./auth.guard";
 import { AuthInterceptor } from "./auth.interceptor";
 import { CheckoutPageComponent } from './components/checkout-page/checkout-page.component';
 import { OrderItemsComponent } from './components/checkout-page/order-items/order-items.component';
+import { MatSnackBarModule } from "@angular/material/snack-bar";
 
 
 
@@ -61,6 +62,7 @@ import { OrderItemsComponent } from './components/checkout-page/order-items/orde
         MatCardModule,
         ReactiveFormsModule,
         MatSelectModule,
+        MatSnackBarModule,
     ],
   providers: [AuthGuard, {provide: HTTP_INTERCEPTORS, useClass:AuthInterceptor, multi: true}],
   bootstrap: [AppComponent]

@@ -51,6 +51,5 @@ export class RegisterPageComponent implements OnInit {
       password: this.registerForm.controls.password.value
     })
     this.router.navigateByUrl('/')
-    window.alert('Successful register!')
   }
 }

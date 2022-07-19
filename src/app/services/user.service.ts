@@ -5,6 +5,7 @@ import { UserLogin } from "../shared/interfaces/UserLogin";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Router } from "@angular/router";
 import { UserRegister } from "../shared/interfaces/UserRegister";
+import {MatSnackBar} from "@angular/material/snack-bar";
 
 
 @Injectable({
@@ -22,6 +23,7 @@ export class UserService {
   constructor(
     private httpClient: HttpClient,
     private router: Router,
+    private matSnack: MatSnackBar,
   ) {
     this.userObservable = this.userSubject.asObservable();
   }
@@ -36,9 +38,18 @@ export class UserService {
         next: (user) =>{
           this.setUserToLocalStorage(user)
           this.userSubject.next(user);
+          this.matSnack.open(JSON.stringify(user.name), 'Successful login!',{
+            duration: 3000,
+            verticalPosition: "top",
+            horizontalPosition: "end",
+          });
         },
-        error: (errorResponse) => {
-          console.log(errorResponse.error, 'Failed Login');
+        error: (err) => {
+          this.matSnack.open(JSON.stringify(err.error), 'Login failed!',{
+            duration: 5000,
+            verticalPosition: "top",
+            horizontalPosition: "end",
+          });
         }
       })
     );
@@ -49,10 +60,18 @@ export class UserService {
       .subscribe({
         next: (user) =>{
           this.userSubject.next(user);
-          console.log('Successful Register!')
+          this.matSnack.open(JSON.stringify(user.name), 'Successful register!',{
+            duration: 3000,
+            verticalPosition: "top",
+            horizontalPosition: "end",
+          });
         },
-        error: (error) => {
-          console.log(error, 'Failed Register');
+        error: (err) => {
+          this.matSnack.open(JSON.stringify(err.error.text), 'Register failed!',{
+            duration: 5000,
+            verticalPosition: "top",
+            horizontalPosition: "end",
+          });
         }
       })
   }

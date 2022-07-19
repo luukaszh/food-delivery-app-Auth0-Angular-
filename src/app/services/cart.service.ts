@@ -5,6 +5,7 @@ import {Food} from "../shared/models/food";
 import {BehaviorSubject, Observable, Subscription} from "rxjs";
 import {Order} from "../shared/models/order";
 import {HttpClient} from "@angular/common/http";
+import {MatSnackBar} from "@angular/material/snack-bar";
 
 @Injectable({
   providedIn: 'root'
@@ -19,6 +20,7 @@ export class CartService {
 
   constructor(
     private httpClient: HttpClient,
+    private matSnack: MatSnackBar,
   ) { }
 
   addItemToCart(food: Food): void{
@@ -66,10 +68,18 @@ export class CartService {
     return this.httpClient.post<Order>(this.baseURL + '/orders', order)
       .subscribe({
         next: (order) =>{
-          console.log('Successful Order!')
+          this.matSnack.open(JSON.stringify(order.name), 'Successful order!',{
+            duration: 3000,
+            verticalPosition: "top",
+            horizontalPosition: "end",
+          });
         },
         error: (error) => {
-          console.log(error, 'Failed Order');
+          this.matSnack.open(JSON.stringify(error), 'Failed order!',{
+            duration: 5000,
+            verticalPosition: "top",
+            horizontalPosition: "end",
+          });
         }
       })
   }

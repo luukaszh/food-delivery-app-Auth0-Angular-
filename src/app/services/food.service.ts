@@ -4,6 +4,7 @@ import {HttpClient} from "@angular/common/http";
 import {BehaviorSubject, Observable, Subscription, tap} from "rxjs";
 import { FoodAdd } from "../shared/interfaces/FoodAdd";
 import { FoodDelete } from "../shared/interfaces/foodDelete";
+import {MatSnackBar} from "@angular/material/snack-bar";
 
 @Injectable({
   providedIn: 'root'
@@ -17,7 +18,8 @@ export class FoodService {
   public foodObservable: Observable<Food>
 
   constructor(
-    private httpClient: HttpClient
+    private httpClient: HttpClient,
+    private matSnack: MatSnackBar,
   ) {
     this.foodObservable = this.foodSubject.asObservable();
   }
@@ -27,15 +29,23 @@ export class FoodService {
   }
 
   addFood(foodAdd: FoodAdd): Observable<Food>{
+    console.log(foodAdd)
     return this.httpClient.post<Food>(this.baseURL + '/examplefood/add', foodAdd).pipe(
       tap({
         next: (food) =>{
           this.foodSubject.next(food);
-          console.log('Successful Food Add!')
+          this.matSnack.open(JSON.stringify(food.name), 'Successful food add!',{
+            duration: 3000,
+            verticalPosition: "top",
+            horizontalPosition: "end",
+          });
         },
-        error: (errorResponse) => {
-          console.log(errorResponse.error, 'Failed Food Add');
-        }
+        error: (err) => {
+          this.matSnack.open(JSON.stringify(err.error.text), 'Add food failed!',{
+            duration: 3000,
+            verticalPosition: "top",
+            horizontalPosition: "end",
+          });        }
       })
     );
   }
@@ -45,10 +55,18 @@ export class FoodService {
       .subscribe({
         next: (food) => {
           this.foodSubject.next(food);
-          console.log('Successful Food Deleted!');
+          this.matSnack.open(JSON.stringify(food.name), 'Successful food delete!',{
+            duration: 3000,
+            verticalPosition: "top",
+            horizontalPosition: "end",
+          });
         },
-        error: (errorResponse) => {
-          console.log(errorResponse.error, 'Failed Food Deleted');
+        error: (err) => {
+          this.matSnack.open(JSON.stringify(err.error.text), 'Delete food failed!',{
+            duration: 5000,
+            verticalPosition: "top",
+            horizontalPosition: "end",
+          });
         }
       })
   }
