@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { UserService } from "../../services/user.service";
 import { ActivatedRoute, Router } from "@angular/router";
+import { MatSnackBar } from "@angular/material/snack-bar";
 
 
 @Component({
@@ -20,6 +21,7 @@ export class LoginPageComponent implements OnInit {
     private userService: UserService,
     private activatedRoute: ActivatedRoute,
     private router: Router,
+    private matSnack: MatSnackBar,
   ) { }
 
   ngOnInit(): void {
@@ -36,6 +38,16 @@ export class LoginPageComponent implements OnInit {
 
   onSubmit(){
     this.isSubmit = true;
+    console.log(this.loginForm.controls.password.value.length)
+    if (this.loginForm.controls.password.value.length < 2) {
+      this.matSnack.open('Login failed!', 'Minimum 2 characters', {
+        duration: 3000,
+        verticalPosition: "top",
+        horizontalPosition: "end",
+      });
+      return;
+    }
+
     if(this.loginForm.controls.invalid)
       return;
 
