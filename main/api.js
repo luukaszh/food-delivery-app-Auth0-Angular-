@@ -19,6 +19,8 @@ app.listen(3300, ()=>{
 
 client.connect();
 
+let token;
+
 app.get('/food', (req, res)=>{
   client.query(`Select * from food`, (err, result)=>{
     if(!err){
@@ -40,19 +42,23 @@ app.get('/food/:id', (req, res)=>{
   client.end;
 })
 
-
 app.delete('/food/:id', (req, res)=> {
-  let insertQuery = `delete from food where id=${req.params.id}`
-  // console.log(req.params.id)
-  client.query(insertQuery, (err, result)=>{
-    if(!err){
-      res.send('Deletion was successful')
+  jwt.verify(token.token, 'secretKey', (err, authData) => {
+    if (err && token.isadmin === false){
+      res.status(403).send("You do not have permission!")
+    } else{
+      let insertQuery = `delete from food where id=${req.params.id}`
+      // console.log(req.params.id)
+      client.query(insertQuery, (err, result)=>{
+        if(!err){
+          res.send('Deletion was successful')
+        }
+        else{ console.log(err.message) }
+      })
+      client.end;
     }
-    else{ console.log(err.message) }
-  })
-  client.end;
+  });
 })
-
 
 app.get('/users', (req, res)=>{
   client.query(`Select * from users`, (err, result)=>{
@@ -76,13 +82,13 @@ app.post('/users/login', (req, res)=> {
 
       if (user) {
         console.log('git', user)
-        res.send(generateToken(user));
+        token = generateToken(user)
+        res.send(token);
       } else {
-        console.log(err, 'Password or email incorrect')
         res.status(400).send("Password or email incorrect")
       }
     } else {
-      console.log(err, 'Users not found')
+      res.send(err, 'Users not found')
     }
   })
 })
@@ -105,32 +111,19 @@ app.post('/users/register',  (req, res)=> {
           if(!err){
             res.send('Insertion was successful')
           }
-          else{ console.log('err', err.message) }
+          else{
+            res.send('err', err.message)
+          }
         })
         client.end;
       }
       else {
-        console.log('User already exists')
         res.send('User already exists');
       }
     } else{
-      console.log(err, 'Users not found')
+      res.send(err, 'Users not found')
     }
   })
-})
-
-app.get('/users/verify', verifyToken, (req, res) => {
-  jwt.verify(req.token, 'secretKey', (err, authData) => {
-    if (err){
-      res.sendStatus(403);
-    } else{
-      res.json({
-        message: 'Post created',
-        authData,
-        isadmin: authData.isadmin,
-      });
-    }
-  });
 })
 
 app.post('/orders', (req, res) => {
@@ -147,11 +140,96 @@ app.post('/orders', (req, res) => {
       if(!err){
         res.send('Insertion was successful')
       }
-      else{ console.log('err', err.message) }
+      else{
+        res.send('err', err.message)
+      }
     })
     client.end;
   });
 });
+
+
+
+
+
+app.get('/examplefood', (req, res)=>{
+  jwt.verify(token.token, 'secretKey', (err, authData) => {
+    if (err && token.isadmin === false){
+      res.sendStatus(403);
+    } else{
+      client.query(`Select * from examplefood`, (err, result)=>{
+        if(!err){
+          res.send(result.rows);
+        } else{
+          res.send(err, 'error')
+        }
+      });
+      client.end;
+    }
+  });
+})
+
+app.post('/examplefood/add', (req, res)=>{
+  jwt.verify(token.token, 'secretKey', (err, authData) => {
+    if (err && token.isadmin === false){
+      res.status(403).send("You do not have permission!")
+    } else{
+      client.query(`Select * from examplefood`, (err, result)=>{
+        if(!err){
+          arr_len = result.rows.length;
+          let j = 1;
+          sorted_rows = result.rows.sort(dynamicSort('id'))
+
+          for (i in sorted_rows) {
+            if (parseInt(sorted_rows[i].id) !== j) {
+              const food = req.body;
+
+              let insertQuery = `insert into examplefood(id, name, price, cooktime, imageurl)
+                       values('${food.id = j}', '${food.name}', '${food.price}', '${food.cooktime}', '${food.imageurl}')`
+
+              client.query(insertQuery, (err, result) => {
+                if (!err) {
+                  res.send('Insertion was successful')
+                  client.end;
+                } else {
+                  res.send('Insertion was NOT successful', err.message)
+                }
+              })
+              client.end;
+            } else {
+
+              if (j === sorted_rows.length){
+                const food = req.body;
+
+                let insertQuery = `insert into examplefood(id, name, price, cooktime, imageurl)
+                       values('${food.id = j + 1}', '${food.name}', '${food.price}', '${food.cooktime}', '${food.imageurl}')`
+
+                client.query(insertQuery, (err, result) => {
+                  if (!err) {
+                    res.send('Insertion was successful')
+                    client.end;
+                  } else {
+                    res.send('Insertion was NOT successful', err.message)
+                  }
+                })
+                client.end;
+              } else {
+                j += 1;
+              }
+            }
+          }
+        } else{
+          res.send(err, 'error')
+        }
+      });
+    }
+  });
+})
+
+
+
+
+
 
 const generateToken = (user) => {
   const token = jwt.sign({
@@ -160,21 +238,8 @@ const generateToken = (user) => {
     expiresIn: "30d"
   });
   user.token = token;
+  console.log(token)
   return user;
-}
-
-function verifyToken(req, res, next){
-  const bearerHeader = req.headers['authorization']
-
-  if(typeof bearerHeader !== 'undefined'){
-    const bearer = bearerHeader.split(' ');
-    const bearerToken = bearer[1];
-    req.token = bearerToken;
-    console.log(bearerToken)
-    next();
-  }else {
-    res.sendStatus(403);
-  }
 }
 
 function dynamicSort(property) {
@@ -182,74 +247,3 @@ function dynamicSort(property) {
     return (a[property] < b[property]) ? -1 : (a[property] > b[property]) ? 1 : 0;
   }
 }
-
-
-
-
-
-app.get('/examplefood', (req, res)=>{
-  client.query(`Select * from examplefood`, (err, result)=>{
-    if(!err){
-      res.send(result.rows
-      );
-    } else{
-      console.log(err, 'error')
-    }
-  });
-  client.end;
-})
-
-app.post('/examplefood/add', (req, res)=>{
-
-  client.query(`Select * from examplefood`, (err, result)=>{
-    if(!err){
-      arr_len = result.rows.length;
-      let j = 1;
-      sorted_rows = result.rows.sort(dynamicSort('id'))
-
-      for (i in sorted_rows) {
-        if (parseInt(sorted_rows[i].id) !== j) {
-
-          const food = req.body;
-
-          let insertQuery = `insert into examplefood(id, name, price, cooktime, imageurl)
-                       values('${food.id = j}', '${food.name}', '${food.price}', '${food.cooktime}', '${food.imageurl}')`
-
-          client.query(insertQuery, (err, result) => {
-            if (!err) {
-              res.send('Insertion was successful')
-              client.end;
-            } else {
-              console.log('Insertion was NOT successful', err.message)
-            }
-          })
-          client.end;
-        } else {
-
-          j += 1;
-
-          if (j === sorted_rows.length){
-            const food = req.body;
-
-            let insertQuery = `insert into examplefood(id, name, price, cooktime, imageurl)
-                       values('${food.id = j + 1}', '${food.name}', '${food.price}', '${food.cooktime}', '${food.imageurl}')`
-
-            client.query(insertQuery, (err, result) => {
-              if (!err) {
-                console.log('ds')
-                res.send('Insertion was successful')
-                client.end;
-              } else {
-                console.log('Insertion was NOT successful', err.message)
-              }
-            })
-            client.end;
-          }
-        }
-      }
-    } else{
-      console.log(err, 'error')
-    }
-  });
-})
-

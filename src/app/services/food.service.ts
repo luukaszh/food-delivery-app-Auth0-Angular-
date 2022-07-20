@@ -5,6 +5,7 @@ import {BehaviorSubject, Observable, Subscription, tap} from "rxjs";
 import { FoodAdd } from "../shared/interfaces/FoodAdd";
 import { FoodDelete } from "../shared/interfaces/foodDelete";
 import {MatSnackBar} from "@angular/material/snack-bar";
+import {Router} from "@angular/router";
 
 @Injectable({
   providedIn: 'root'
@@ -39,6 +40,7 @@ export class FoodService {
             verticalPosition: "top",
             horizontalPosition: "end",
           });
+          window.location.reload()
         },
         error: (err) => {
           this.matSnack.open(JSON.stringify(err.error.text), 'Add food failed!',{
@@ -60,6 +62,7 @@ export class FoodService {
             verticalPosition: "top",
             horizontalPosition: "end",
           });
+          window.location.reload()
         },
         error: (err) => {
           this.matSnack.open(JSON.stringify(err.error.text), 'Delete food failed!',{

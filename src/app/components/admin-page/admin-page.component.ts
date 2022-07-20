@@ -4,7 +4,6 @@ import {FoodService} from "../../services/food.service";
 import {Food} from "../../shared/models/food";
 import {Observable} from "rxjs";
 import {FoodDelete} from "../../shared/interfaces/foodDelete";
-import {UserService} from "../../services/user.service";
 
 @Component({
   selector: 'app-admin-page',
@@ -21,12 +20,11 @@ export class AdminPageComponent implements OnInit {
 
   selected!: FoodDelete;
 
-  authData = false;
+  authData = true;
 
   constructor(
     private foodService: FoodService,
     private formBuilder: FormBuilder,
-    private userService: UserService,
   ) {
     let foodObservable: Observable<Food[]>
 
@@ -38,7 +36,6 @@ export class AdminPageComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.authUser()
     this.addForm = this.formBuilder.group(
       {
         name: [
@@ -57,46 +54,22 @@ export class AdminPageComponent implements OnInit {
   }
 
   onSubmit(){
-    console.log('dsad', this.authData)
-    if (this.authData){
-      this.isSubmit = true;
-      if (this.addForm.controls.invalid)
-        return;
+    this.isSubmit = true;
+    if (this.addForm.controls.invalid)
+      return;
 
-      this.foodService.addFood({
-        name: this.addForm.controls.name.value,
-        price: this.addForm.controls.price.value,
-        cooktime: this.addForm.controls.cooktime.value,
-        imageurl: this.addForm.controls.imageurl.value,
-      }).subscribe(() => {
-        window.location.reload();
-      });
-    } else {
-      window.alert('You do not have permission!')
-      console.log('You do not have permission!')
-      console.log(this.authData)
-    }
+    this.foodService.addFood({
+      name: this.addForm.controls.name.value,
+      price: this.addForm.controls.price.value,
+      cooktime: this.addForm.controls.cooktime.value,
+      imageurl: this.addForm.controls.imageurl.value,
+    }).subscribe(() => {
+      window.location.reload();
+    });
   }
 
   onDeleteSubmit(){
-    if (this.authData) {
       this.foodService.deleteFood(this.selected);
-    } else {
-      window.alert('You do not have permission!')
-      console.log('You do not have permission!')
-    }
-  }
-
-  authUser(){
-    return this.userService.getVerifyUser()
-      .subscribe({
-        next: (res) =>{
-          this.authData = res.isadmin
-        },
-        error: (error) => {
-          console.log(error);
-        }
-      });
   }
 
 }
