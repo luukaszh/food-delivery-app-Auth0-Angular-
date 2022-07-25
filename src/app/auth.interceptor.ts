@@ -16,8 +16,10 @@ export class AuthInterceptor implements HttpInterceptor {
   ) {}
 
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
+    console.log('tutaj')
     const user = this.userService.currentUser
     if(user.token){
+      console.log('tutaj w ifie')
       request = request.clone({
         headers: request.headers.set('Authorization', `Bearer ${user.token}`),
       });

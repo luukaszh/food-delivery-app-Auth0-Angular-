@@ -1,6 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, Inject, OnInit} from '@angular/core';
 import { UserService } from "../../services/user.service";
 import { User } from "../../shared/models/user";
+import { AuthService } from "@auth0/auth0-angular";
+import {DOCUMENT} from "@angular/common";
 
 @Component({
   selector: 'app-header',
@@ -12,7 +14,9 @@ export class HeaderComponent implements OnInit {
   user!: User;
 
   constructor(
+    @Inject(DOCUMENT) private doc: Document,
     private userService: UserService,
+    public auth: AuthService,
   ) {
     userService.userObservable.subscribe((newUser) => {
       this.user = newUser;
@@ -22,7 +26,11 @@ export class HeaderComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  logout(){
-    this.userService.logout();
+  loginWithAuth0(): void {
+    this.auth.loginWithRedirect();
+  }
+
+  logoutWithAuth0(): void {
+    this.auth.logout({ returnTo: this.doc.location.origin });
   }
 }

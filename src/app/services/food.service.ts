@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import {Food} from "../shared/models/food";
-import {HttpClient} from "@angular/common/http";
+import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {BehaviorSubject, Observable, Subscription, tap} from "rxjs";
 import { FoodAdd } from "../shared/interfaces/FoodAdd";
 import { FoodDelete } from "../shared/interfaces/foodDelete";

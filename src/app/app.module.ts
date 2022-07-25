@@ -16,10 +16,8 @@ import { FoodPageComponent } from './components/food-page/food-page.component';
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatInputModule } from "@angular/material/input";
 import { CartPageComponent } from './components/cart-page/cart-page.component';
-import { LoginPageComponent } from './components/login-page/login-page.component';
 import { MatCardModule } from "@angular/material/card";
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { RegisterPageComponent } from './components/register-page/register-page.component';
 import { AdminPageComponent } from './components/admin-page/admin-page.component';
 import { MatSelectModule } from "@angular/material/select";
 import { NotFoundPageComponent } from './components/not-found-page/not-found-page.component';
@@ -29,6 +27,8 @@ import { CheckoutPageComponent } from './components/checkout-page/checkout-page.
 import { OrderItemsComponent } from './components/checkout-page/order-items/order-items.component';
 import { MatSnackBarModule } from "@angular/material/snack-bar";
 
+import { AuthModule, AuthHttpInterceptor } from "@auth0/auth0-angular";
+import { environment as env } from '../environments/environment'
 
 
 @NgModule({
@@ -39,8 +39,6 @@ import { MatSnackBarModule } from "@angular/material/snack-bar";
     SearchComponent,
     FoodPageComponent,
     CartPageComponent,
-    LoginPageComponent,
-    RegisterPageComponent,
     AdminPageComponent,
     NotFoundPageComponent,
     CheckoutPageComponent,
@@ -63,8 +61,36 @@ import { MatSnackBarModule } from "@angular/material/snack-bar";
         ReactiveFormsModule,
         MatSelectModule,
         MatSnackBarModule,
+        AuthModule.forRoot({
+          ...env.auth,
+          httpInterceptor: {
+            allowedList: [
+              `http://localhost:3300/api/messages/protected-message`,
+              `http://localhost:3300/food`,
+              `http://localhost:3300/food/1`,
+              `http://localhost:3300/food/2`,
+              `http://localhost:3300/food/3`,
+              `http://localhost:3300/food/4`,
+              `http://localhost:3300/food/5`,
+              `http://localhost:3300/food/6`,
+              `http://localhost:3300/food/7`,
+              `http://localhost:3300/food/8`,]
+          },
+        }),
     ],
-  providers: [AuthGuard, {provide: HTTP_INTERCEPTORS, useClass:AuthInterceptor, multi: true}],
+  providers: [AuthGuard,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthHttpInterceptor,
+      multi: true
+    },
+
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
+      multi: true
+    }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
