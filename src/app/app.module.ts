@@ -74,7 +74,10 @@ import { environment as env } from '../environments/environment'
               `http://localhost:3300/food/5`,
               `http://localhost:3300/food/6`,
               `http://localhost:3300/food/7`,
-              `http://localhost:3300/food/8`,]
+              `http://localhost:3300/food/8`,
+              `http://localhost:3300/examplefood`,
+              `http://localhost:3300/examplefood/add`,
+              `http://localhost:3300/examplefood/orders`,]
           },
         }),
     ],

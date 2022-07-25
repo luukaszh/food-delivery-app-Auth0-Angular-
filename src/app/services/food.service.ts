@@ -1,11 +1,10 @@
 import { Injectable } from '@angular/core';
-import {Food} from "../shared/models/food";
-import {HttpClient, HttpHeaders} from "@angular/common/http";
-import {BehaviorSubject, Observable, Subscription, tap} from "rxjs";
+import { Food } from "../shared/models/food";
+import { HttpClient } from "@angular/common/http";
+import { BehaviorSubject, Observable, Subscription, tap } from "rxjs";
 import { FoodAdd } from "../shared/interfaces/FoodAdd";
 import { FoodDelete } from "../shared/interfaces/foodDelete";
-import {MatSnackBar} from "@angular/material/snack-bar";
-import {Router} from "@angular/router";
+import { MatSnackBar } from "@angular/material/snack-bar";
 
 @Injectable({
   providedIn: 'root'

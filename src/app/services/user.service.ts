@@ -1,16 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, Subscription, tap } from "rxjs";
 import { User } from "../shared/models/user";
-import { UserLogin } from "../shared/interfaces/UserLogin";
-import { HttpClient } from "@angular/common/http";
-import { Router } from "@angular/router";
-import { UserRegister } from "../shared/interfaces/UserRegister";
-import { MatSnackBar } from "@angular/material/snack-bar";
-import { environment as env } from '../../environments/environment'
 
-interface Message {
-  message: string;
-}
 
 @Injectable({
   providedIn: 'root'
@@ -24,12 +15,7 @@ export class UserService {
 
   public userObservable: Observable<User>
 
-  baseURL = 'http://localhost:3300'
-
   constructor(
-    private httpClient: HttpClient,
-    private router: Router,
-    private matSnack: MatSnackBar,
   ) {
     this.userObservable = this.userSubject.asObservable();
   }
