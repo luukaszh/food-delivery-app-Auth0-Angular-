@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {Food} from "../../shared/models/food";
 import {FoodService} from "../../services/food.service";
 import {Observable} from "rxjs";
+import {AuthService} from "@auth0/auth0-angular";
 
 @Component({
   selector: 'app-home',
@@ -16,14 +17,19 @@ export class HomeComponent implements OnInit {
 
   constructor(
     private foodService: FoodService,
+    public auth: AuthService,
   ) {
     let foodObservable: Observable<Food[]>
 
     foodObservable = foodService.getAll();
 
-    foodObservable.subscribe((serverFoods) => {
-      console.log(serverFoods)
-      this.foods = serverFoods;
+    foodObservable.subscribe({
+      next: (serverFoods) => {
+        this.foods = serverFoods;
+      },
+      error: (err) => {
+        this.auth.loginWithRedirect();
+      }
     })
   }
 

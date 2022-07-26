@@ -9,6 +9,8 @@
 
   <button *ngIf="(auth.isAuthenticated$ | async) === false" class="buttons" mat-raised-button (click)="loginWithAuth0()" style="margin-right:1.5rem">Login with Auth0</button>
 
+  <a *ngIf="auth.user$ | async as user" class="buttons" mat-raised-button style="margin-right:1.5rem">{{ user.name }}</a>
+
   <span *ngIf="(auth.isAuthenticated$ | async)" class="material-icons" (click)="logoutWithAuth0()" style="margin-right:1.5rem">logout</span>
 
 </mat-toolbar>
